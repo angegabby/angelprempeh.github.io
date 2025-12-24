@@ -1,0 +1,44 @@
+/* Icon styling for refined professional look */
+.interests li .icon {
+    color: var(--color-gold);
+    font-size: 0.875rem;
+    margin-right: 0.5rem;
+    font-weight: 600;
+}
+
+/* Update interests list to remove old bullet styling */
+.interests li {
+    padding-left: 0 !important;
+}
+
+.interests li::before {
+    display: none !important;
+}
+
+/* Logo sizing fix */
+.logo img {
+    height: 60px !important;
+    width: auto;
+    display: block;
+    background: transparent;
+}
+
+/* Theme toggle SVG support */
+.theme-toggle {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-toggle svg {
+    display: block;
+}
+
+/* Social link SVG support */
+.social-link svg {
+    display: block;
+}
+
+.social-link {
+    font-size: 0 !important;
+}

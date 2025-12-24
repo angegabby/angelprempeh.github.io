@@ -106,24 +106,65 @@ function updateThemeIcon(theme) {
 // === SCROLL ANIMATIONS ===
 function initScrollAnimations() {
   const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -100px 0px'
+    threshold: 0.15,
+    rootMargin: '0px 0px -80px 0px'
   };
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        entry.target.classList.add('animate-in');
+        entry.target.classList.add('fade-in');
+        
+        // Add staggered animation for grid items
+        if (entry.target.classList.contains('research-card') || 
+            entry.target.classList.contains('activity-card')) {
+          const cards = document.querySelectorAll('.research-card, .activity-card');
+          cards.forEach((card, index) => {
+            setTimeout(() => {
+              card.classList.add('fade-in');
+            }, index * 100);
+          });
+        }
+        
+        // Animate stats with counter effect
+        if (entry.target.classList.contains('stat-number')) {
+          animateCounter(entry.target);
+        }
       }
     });
   }, observerOptions);
 
-  // Observe elements
+  // Observe elements for fade-in
   const elementsToAnimate = document.querySelectorAll(
-    '.highlight-card, .research-card, .activity-card, .about-content'
+    '.section-header, .hero-content, .about-content, .highlight-card, .research-card, .activity-card, .interests, .stat, .contact-content'
   );
 
   elementsToAnimate.forEach(el => observer.observe(el));
+  
+  // Observe stat numbers for counter animation
+  document.querySelectorAll('.stat-number').forEach(el => observer.observe(el));
+}
+
+// Animate stat counters
+function animateCounter(element) {
+  const target = element.textContent.replace('+', '');
+  const isPlus = element.textContent.includes('+');
+  const duration = 2000;
+  const steps = 60;
+  const stepDuration = duration / steps;
+  let current = 0;
+  
+  const increment = parseInt(target) / steps;
+  
+  const timer = setInterval(() => {
+    current += increment;
+    if (current >= parseInt(target)) {
+      element.textContent = target + (isPlus ? '+' : '');
+      clearInterval(timer);
+    } else {
+      element.textContent = Math.floor(current) + (isPlus ? '+' : '');
+    }
+  }, stepDuration);
 }
 
 // === SMOOTH SCROLL ===

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme Selector - Angel G. A. Prempeh</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        p {
+            text-align: center;
+            color: #666;
+            margin-bottom: 3rem;
+        }
+
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .theme-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .theme-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .theme-preview {
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-card.original .theme-preview {
+            background: linear-gradient(135deg, #0066CC 0%, #004999 100%);
+        }
+
+        .theme-card.gradient .theme-preview {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .theme-card.minimal .theme-preview {
+            background: linear-gradient(135deg, #000000 0%, #ff6b6b 50%, #ffffff 100%);
+        }
+
+        .theme-card.academic .theme-preview {
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 50%, #FFF8F0 100%);
+        }
+
+        .theme-card.tech .theme-preview {
+            background: linear-gradient(135deg, #00FFFF 0%, #FF00FF 50%, #0A0E1A 100%);
+        }
+
+        .theme-preview::before {
+            content: '';
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            right: 10%;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+        }
+
+        .theme-preview::after {
+            content: '';
+            position: absolute;
+            bottom: 10%;
+            left: 10%;
+            right: 10%;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+        }
+
+        .theme-info {
+            padding: 1.5rem;
+        }
+
+        .theme-info h3 {
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .theme-info p {
+            text-align: left;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .theme-info button {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
+            background: #0066CC;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .theme-info button:hover {
+            background: #004999;
+        }
+
+        .theme-card.gradient .theme-info button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .theme-card.minimal .theme-info button {
+            background: #000000;
+        }
+
+        .theme-card.academic .theme-info button {
+            background: #8B4513;
+        }
+
+        .theme-card.tech .theme-info button {
+            background: linear-gradient(135deg, #00FFFF 0%, #FF00FF 100%);
+        }
+
+        .instructions {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .instructions h2 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .instructions ol {
+            margin-left: 1.5rem;
+            color: #666;
+        }
+
+        .instructions li {
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+
+        .instructions code {
+            background: #f0f0f0;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🎨 Choose Your Website Style</h1>
+        <p>Click on any theme below to preview it in a new tab</p>
+
+        <div class="theme-grid">
+            <!-- Original Theme -->
+            <div class="theme-card original" onclick="openTheme('original')">
+                <div class="theme-preview"></div>
+                <div class="theme-info">
+                    <h3>Original Apple-Inspired</h3>
+                    <p>Clean, minimalist design with a professional blue color scheme. Perfect for a medical
+                        professional.</p>
+                    <button>View Theme →</button>
+                </div>
+            </div>
+
+            <!-- Gradient Modern -->
+            <div class="theme-card gradient" onclick="openTheme('gradient')">
+                <div class="theme-preview"></div>
+                <div class="theme-info">
+                    <h3>Gradient Modern</h3>
+                    <p>Bold gradients and vibrant colors. Eye-catching design with purple and gold accents.</p>
+                    <button>View Theme →</button>
+                </div>
+            </div>
+
+            <!-- Minimalist Monochrome -->
+            <div class="theme-card minimal" onclick="openTheme('minimal')">
+                <div class="theme-preview"></div>
+                <div class="theme-info">
+                    <h3>Minimalist Monochrome</h3>
+                    <p>Clean black & white design with red accent pops. Ultra-modern and professional.</p>
+                    <button>View Theme →</button>
+                </div>
+            </div>
+
+            <!-- Warm Academic -->
+            <div class="theme-card academic" onclick="openTheme('academic')">
+                <div class="theme-preview"></div>
+                <div class="theme-info">
+                    <h3>Warm Academic</h3>
+                    <p>Warm brown tones inspired by traditional academia. Sophisticated and scholarly.</p>
+                    <button>View Theme →</button>
+                </div>
+            </div>
+
+            <!-- Tech/Futuristic -->
+            <div class="theme-card tech" onclick="openTheme('tech')">
+                <div class="theme-preview"></div>
+                <div class="theme-info">
+                    <h3>Tech/Futuristic</h3>
+                    <p>Sleek design with neon cyan and magenta. Perfect for showcasing tech and innovation.</p>
+                    <button>View Theme →</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h2>How to Apply a Theme</h2>
+            <ol>
+                <li><strong>Preview themes:</strong> Click on any theme card above to open it in a new browser tab and
+                    see how it looks.</li>
+                <li><strong>Choose your favorite:</strong> Browse through all the options and decide which style best
+                    represents you.</li>
+                <li><strong>Apply the theme:</strong> To permanently apply a theme, edit your <code>index.html</code>
+                    file and change line 20:
+                    <ul style="margin-top: 0.5rem; list-style-type: none;">
+                        <li style="margin-top: 0.5rem;"><strong>Original:</strong>
+                            <code>&lt;link rel="stylesheet" href="styles/main.css"&gt;</code></li>
+                        <li><strong>Gradient Modern:</strong>
+                            <code>&lt;link rel="stylesheet" href="styles/theme-gradient.css"&gt;</code></li>
+                        <li><strong>Minimalist Monochrome:</strong>
+                            <code>&lt;link rel="stylesheet" href="styles/theme-minimal.css"&gt;</code></li>
+                        <li><strong>Warm Academic:</strong>
+                            <code>&lt;link rel="stylesheet" href="styles/theme-academic.css"&gt;</code></li>
+                        <li><strong>Tech/Futuristic:</strong>
+                            <code>&lt;link rel="stylesheet" href="styles/theme-tech.css"&gt;</code></li>
+                    </ul>
+                </li>
+                <li><strong>Switch anytime:</strong> You can easily switch between themes by changing that one line in
+                    your HTML file.</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        function openTheme(theme) {
+            const basePath = window.location.href.substring(0, window.location.href.lastIndexOf('/'));
+            let url;
+
+            switch (theme) {
+                case 'original':
+                    url = basePath + '/index.html';
+                    break;
+                case 'gradient':
+                    url = basePath + '/preview-gradient.html';
+                    break;
+                case 'minimal':
+                    url = basePath + '/preview-minimal.html';
+                    break;
+                case 'academic':
+                    url = basePath + '/preview-academic.html';
+                    break;
+                case 'tech':
+                    url = basePath + '/preview-tech.html';
+                    break;
+            }
+
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+
+</html>
