@@ -781,59 +781,85 @@ footer p {
 @media (max-width: 968px) {
     .hero-container {
         grid-template-columns: 1fr;
-        gap: 1.5rem;
-        /* Reduced gap for tighter layout */
+        gap: 1.25rem;
+        /* Tight spacing for compact layout */
         text-align: center;
-        /* Use flexbox to reorder: content first, image second */
+        /* Use flexbox to reorder: photo first (like Abra's site) */
         display: flex;
         flex-direction: column;
+        padding-top: 2rem;
     }
 
-    .hero-content {
-        order: 1;
-        /* Name/content appears first */
-    }
-
-    .hero-logo img {
-        width: 120px;
-        /* Smaller logo on mobile */
-    }
-
-    .hero-name {
-        font-size: clamp(1.75rem, 8vw, 2.5rem);
-        /* Smaller name on mobile */
-        margin-top: 0.25rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .hero-content .subtitle {
-        font-size: 1rem;
-        /* Smaller subtitle */
-        margin-bottom: 1rem;
-    }
-
+    /* MOBILE: Photo appears FIRST (like Abra Shen's site) */
     .hero-image {
-        max-width: 240px;
-        /* Much smaller photo on mobile */
-        margin: 0 auto;
-        order: 2;
-        /* Photo appears second */
+        max-width: 280px;
+        /* Larger circular photo showing full face */
+        margin: 0 auto 1rem;
+        order: 1;
+        /* Photo appears first */
+    }
+
+    .hero-image img {
+        border-radius: 50%;
+        /* Circular photo like Abra's */
+        width: 100%;
+        height: 280px;
+        object-fit: cover;
+        object-position: center top;
+        /* Focus on face */
     }
 
     .hero-image::before {
         display: none;
-        /* Remove decorative border on mobile for cleaner look */
+        /* Remove decorative border */
+    }
+
+    /* MOBILE: Content appears SECOND */
+    .hero-content {
+        order: 2;
+        /* Name/content appears after photo */
+    }
+
+    .hero-logo {
+        display: none;
+        /* Hide logo on mobile for cleaner look */
+    }
+
+    .hero-name {
+        font-size: clamp(1.875rem, 8vw, 2.25rem);
+        /* Prominent name */
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+        line-height: 1.2;
+    }
+
+    .hero-content .subtitle {
+        font-size: 1rem;
+        /* Affiliation */
+        margin-bottom: 1rem;
+        line-height: 1.4;
+    }
+
+    /* Show bio on mobile (hidden by default, we'll add it) */
+    .hero-content .bio {
+        display: block !important;
+        font-size: 0.9375rem;
+        line-height: 1.6;
+        margin-bottom: 1.25rem;
+        padding: 0 1rem;
+        color: var(--color-text-secondary);
     }
 
     .hero-links {
         justify-content: center;
         gap: 0.75rem;
-        margin-top: 1rem;
+        margin-top: 0.75rem;
+        flex-wrap: wrap;
     }
 
     .btn {
-        padding: 0.75rem 1.5rem;
-        /* Smaller buttons */
+        padding: 0.65rem 1.25rem;
+        /* Compact buttons */
         font-size: 0.875rem;
     }
 
@@ -841,6 +867,11 @@ footer p {
         left: 50%;
         transform: translateX(-50%);
     }
+}
+
+left: 50%;
+transform: translateX(-50%);
+}
 }
 
 @media (max-width: 768px) {
