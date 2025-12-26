@@ -122,8 +122,8 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center 20%;
-    /* Shows face with space above */
+    object-position: center 30%;
+    /* Moved from 20% to 30% to bring head down slightly */
 }
 
 .hero-name {
