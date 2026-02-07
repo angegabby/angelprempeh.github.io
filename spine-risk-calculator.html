@@ -44,6 +44,16 @@
             font-style: italic;
             color: #666;
             font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .description {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            color: #555;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.5;
         }
 
         .section-box {
@@ -115,6 +125,41 @@
         input:focus {
             border-color: #003366;
             outline: none;
+        }
+
+        /* CCI Checklist Styling */
+        .cci-checklist {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 13px;
+        }
+
+        .cci-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .cci-item input {
+            margin-right: 8px;
+            width: auto;
+        }
+
+        .cci-total {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #ccc;
+            font-weight: bold;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #003366;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #cci-display {
+            font-size: 18px;
         }
 
         .btn-calculate {
@@ -189,6 +234,12 @@
         <header>
             <h1>Spine Surgery Complication Risk Calculator</h1>
             <div class="subtitle">Based on Early Postoperative ICU Physiologic Data</div>
+            <div class="description">
+                This tool predicts the probability of 72-hour postoperative complications (Acute Kidney Injury,
+                Mechanical Ventilation, or Mortality) using granular physiologic and laboratory data from the first 24
+                hours of ICU admission. The model was developed and validated using the MIMIC-IV database (Prempeh et
+                al.).
+            </div>
         </header>
 
         <form id="riskForm">
@@ -214,9 +265,48 @@
                             <option value="1">Male</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="cci">Charlson Comorbidity Index</label>
-                        <input type="number" id="cci" name="cci" placeholder="e.g. 2" required>
+                </div>
+
+                <div class="form-group" style="margin-top: 15px;">
+                    <label style="margin-bottom: 10px;">Charlson Comorbidity Index (Select all that apply):</label>
+                    <div class="cci-checklist">
+                        <label class="cci-item"><input type="checkbox" class="cci-check" value="1"> Myocardial
+                            Infarction</label>
+                        <label class="cci-item"><input type="checkbox" class="cci-check" value="1"> Congestive Heart
+                            Failure</label>
+                        <label class="cci-item"><input type="checkbox" class="cci-check" value="1"> Peripheral Vascular
+                            Dis.</label>
+                        <label class="cci-item"><input type="checkbox" class="cci-check" value="1"> Cerebrovascular
+                            Dis.</label>
+                        <label class="cci-item"><input type="checkbox" class="cci-check" value="1"> Dementia</label>
+                        <label class="cci-item"><input type="checkbox" class="cci-check" value="1"> Chronic Pulmonary
+                            Dis.</label>
+                        <label class="cci-item"><input type="checkbox" class="cci-check" value="1"> Connective Tissue
+                            Dis.</label>
+                        <label class="cci-item"><input type="checkbox" class="cci-check" value="1"> Peptic Ulcer
+                            Disease</label>
+                        <label class="cci-item"><input type="checkbox" class="cci-check" value="1"> Mild Liver
+                            Disease</label>
+                        <label class="cci-item"><input type="checkbox" class="cci-check" value="1"> Diabetes
+                            (uncomplicated)</label>
+                        <label class="cci-item"><input type="checkbox" class="cci-check" value="2"> Diabetes (end-organ
+                            dmg)</label>
+                        <label class="cci-item"><input type="checkbox" class="cci-check" value="2"> Hemiplegia</label>
+                        <label class="cci-item"><input type="checkbox" class="cci-check" value="2"> Mod/Severe Renal
+                            Dis.</label>
+                        <label class="cci-item"><input type="checkbox" class="cci-check" value="2"> Any Tumor</label>
+                        <label class="cci-item"><input type="checkbox" class="cci-check" value="2"> Leukemia</label>
+                        <label class="cci-item"><input type="checkbox" class="cci-check" value="2"> Lymphoma</label>
+                        <label class="cci-item"><input type="checkbox" class="cci-check" value="3"> Mod/Severe Liver
+                            Dis.</label>
+                        <label class="cci-item"><input type="checkbox" class="cci-check" value="6"> Metastatic Solid
+                            Tumor</label>
+                        <label class="cci-item"><input type="checkbox" class="cci-check" value="6"> AIDS</label>
+                    </div>
+                    <div class="cci-total">
+                        <span>Calculated CCI Score:</span>
+                        <span id="cci-display">0</span>
+                        <input type="hidden" id="cci" value="0">
                     </div>
                 </div>
             </div>
@@ -343,10 +433,31 @@
     </div>
 
     <script>
+        // CCI Calculator Logic
+        const checkboxes = document.querySelectorAll('.cci-check');
+        const cciDisplay = document.getElementById('cci-display');
+        const cciInput = document.getElementById('cci');
+
+        function updateCCIScore() {
+            let score = 0;
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    score += parseInt(cb.value);
+                }
+            });
+            cciDisplay.textContent = score;
+            cciInput.value = score;
+        }
+
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', updateCCIScore);
+        });
+
         function calculateRisk() {
             // 1. Get Values
             const age = parseFloat(document.getElementById('age').value) || 0;
             const sex = parseFloat(document.getElementById('sex').value) || 0;
+            // Get CCI from the computed hidden input
             const cci = parseFloat(document.getElementById('cci').value) || 0;
 
             const hr = parseFloat(document.getElementById('hr').value) || 0;
