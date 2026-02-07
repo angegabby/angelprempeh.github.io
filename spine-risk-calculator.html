@@ -1,0 +1,680 @@
+í›<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spine Surgery Complication Risk Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #00d4ff, #7b68ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #a0a0a0;
+            font-size: 0.95rem;
+        }
+
+        .calculator-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            color: #b0b0b0;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group select {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 12px 15px;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .input-group input::placeholder {
+            color: #666;
+        }
+
+        .section-title {
+            color: #00d4ff;
+            font-size: 1rem;
+            margin: 20px 0 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+            grid-column: 1 / -1;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #00d4ff, #7b68ee);
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+        }
+
+        .result-section {
+            margin-top: 30px;
+            text-align: center;
+            display: none;
+        }
+
+        .result-card {
+            background: rgba(0, 212, 255, 0.1);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .risk-label {
+            color: #a0a0a0;
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .risk-value {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .risk-low {
+            color: #00ff88;
+        }
+
+        .risk-moderate {
+            color: #ffcc00;
+        }
+
+        .risk-high {
+            color: #ff6b6b;
+        }
+
+        .risk-category {
+            font-size: 1.3rem;
+            font-weight: 600;
+            padding: 10px 25px;
+            border-radius: 25px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .category-low {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+        }
+
+        .category-moderate {
+            background: rgba(255, 204, 0, 0.2);
+            color: #ffcc00;
+        }
+
+        .category-high {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+        }
+
+        .risk-bar-container {
+            width: 100%;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .risk-bar {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.8s ease;
+        }
+
+        .interpretation {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            color: #c0c0c0;
+            text-align: left;
+        }
+
+        .interpretation h3 {
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .disclaimer {
+            margin-top: 30px;
+            padding: 15px;
+            background: rgba(255, 107, 107, 0.1);
+            border-radius: 10px;
+            color: #ff6b6b;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        .reference {
+            margin-top: 20px;
+            color: #808080;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        /* CCI Checkbox Styles */
+        .cci-checkbox {
+            display: flex;
+            align-items: center;
+            color: #c0c0c0;
+            font-size: 0.9rem;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .cci-checkbox:hover {
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .cci-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+            accent-color: #00d4ff;
+            cursor: pointer;
+        }
+
+        .cci-checkbox input[type="checkbox"]:checked+span,
+        .cci-checkbox:has(input:checked) {
+            color: #00d4ff;
+        }
+
+        .cci-toggle:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>üè• Spine Surgery Complication Risk Calculator</h1>
+            <p>Predict 72-hour postoperative complication risk using machine learning</p>
+        </div>
+
+        <div class="calculator-card">
+            <form id="riskForm">
+                <div class="input-grid">
+                    <!-- Demographics -->
+                    <h3 class="section-title">üë§ Demographics</h3>
+
+                    <div class="input-group">
+                        <label>Age (years)</label>
+                        <input type="number" id="anchor_age" value="63" min="18" max="100" step="1">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Sex</label>
+                        <select id="gender_male">
+                            <option value="1">Male</option>
+                            <option value="0">Female</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Charlson Comorbidity Index
+                            <span class="cci-toggle" onclick="toggleCCI()"
+                                style="cursor:pointer; color:#00d4ff; font-size:0.85rem;">[Click to Calculate ‚ñº]</span>
+                        </label>
+                        <input type="number" id="cci" value="0" min="0" max="37" step="1" readonly
+                            style="background: rgba(0,212,255,0.15);">
+                    </div>
+
+                    <!-- CCI Expandable Section -->
+                    <div class="cci-calculator" id="cciCalculator" style="grid-column: 1 / -1; display: none;">
+                        <div
+                            style="background: rgba(255,255,255,0.03); border-radius: 12px; padding: 20px; border: 1px solid rgba(0,212,255,0.2);">
+                            <h4 style="color: #00d4ff; margin-bottom: 15px; font-size: 0.95rem;">üìã Select Comorbidities
+                                (auto-calculates CCI)</h4>
+
+                            <div
+                                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px;">
+                                <!-- 1 Point Conditions -->
+                                <label class="cci-checkbox"><input type="checkbox" class="cci-item" data-points="1"
+                                        onchange="updateCCI()"> Myocardial Infarction (+1)</label>
+                                <label class="cci-checkbox"><input type="checkbox" class="cci-item" data-points="1"
+                                        onchange="updateCCI()"> Congestive Heart Failure (+1)</label>
+                                <label class="cci-checkbox"><input type="checkbox" class="cci-item" data-points="1"
+                                        onchange="updateCCI()"> Peripheral Vascular Disease (+1)</label>
+                                <label class="cci-checkbox"><input type="checkbox" class="cci-item" data-points="1"
+                                        onchange="updateCCI()"> Cerebrovascular Disease (+1)</label>
+                                <label class="cci-checkbox"><input type="checkbox" class="cci-item" data-points="1"
+                                        onchange="updateCCI()"> Dementia (+1)</label>
+                                <label class="cci-checkbox"><input type="checkbox" class="cci-item" data-points="1"
+                                        onchange="updateCCI()"> Chronic Pulmonary Disease (+1)</label>
+                                <label class="cci-checkbox"><input type="checkbox" class="cci-item" data-points="1"
+                                        onchange="updateCCI()"> Rheumatic Disease (+1)</label>
+                                <label class="cci-checkbox"><input type="checkbox" class="cci-item" data-points="1"
+                                        onchange="updateCCI()"> Peptic Ulcer Disease (+1)</label>
+                                <label class="cci-checkbox"><input type="checkbox" class="cci-item" data-points="1"
+                                        onchange="updateCCI()"> Mild Liver Disease (+1)</label>
+                                <label class="cci-checkbox"><input type="checkbox" class="cci-item" data-points="1"
+                                        onchange="updateCCI()"> Diabetes (uncomplicated) (+1)</label>
+
+                                <!-- 2 Point Conditions -->
+                                <label class="cci-checkbox"><input type="checkbox" class="cci-item" data-points="2"
+                                        onchange="updateCCI()"> Diabetes with End Organ Damage (+2)</label>
+                                <label class="cci-checkbox"><input type="checkbox" class="cci-item" data-points="2"
+                                        onchange="updateCCI()"> Hemiplegia or Paraplegia (+2)</label>
+                                <label class="cci-checkbox"><input type="checkbox" class="cci-item" data-points="2"
+                                        onchange="updateCCI()"> Moderate/Severe Renal Disease (+2)</label>
+                                <label class="cci-checkbox"><input type="checkbox" class="cci-item" data-points="2"
+                                        onchange="updateCCI()"> Any Malignancy (non-metastatic) (+2)</label>
+                                <label class="cci-checkbox"><input type="checkbox" class="cci-item" data-points="2"
+                                        onchange="updateCCI()"> Leukemia (+2)</label>
+                                <label class="cci-checkbox"><input type="checkbox" class="cci-item" data-points="2"
+                                        onchange="updateCCI()"> Lymphoma (+2)</label>
+
+                                <!-- 3 Point Conditions -->
+                                <label class="cci-checkbox"><input type="checkbox" class="cci-item" data-points="3"
+                                        onchange="updateCCI()"> Moderate/Severe Liver Disease (+3)</label>
+
+                                <!-- 6 Point Conditions -->
+                                <label class="cci-checkbox"><input type="checkbox" class="cci-item" data-points="6"
+                                        onchange="updateCCI()"> Metastatic Solid Tumor (+6)</label>
+                                <label class="cci-checkbox"><input type="checkbox" class="cci-item" data-points="6"
+                                        onchange="updateCCI()"> AIDS/HIV (+6)</label>
+                            </div>
+
+                            <div
+                                style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1);">
+                                <span style="color: #fff; font-weight: 600;">Total CCI Score: </span>
+                                <span id="cciTotal"
+                                    style="color: #00d4ff; font-size: 1.2rem; font-weight: 700;">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vital Signs -->
+                    <h3 class="section-title">üíì Vital Signs (24-hour mean)</h3>
+
+                    <div class="input-group">
+                        <label>Heart Rate (bpm)</label>
+                        <input type="number" id="heart_rate_mean" value="86" min="40" max="180" step="1">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Mean Blood Pressure (mmHg)</label>
+                        <input type="number" id="mbp_mean" value="81" min="40" max="140" step="1">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Oxygen Saturation (%)</label>
+                        <input type="number" id="spo2_mean" value="98" min="70" max="100" step="0.1">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Respiratory Rate (/min)</label>
+                        <input type="number" id="resp_rate_mean" value="17" min="8" max="40" step="1">
+                    </div>
+
+                    <!-- Laboratory Values -->
+                    <h3 class="section-title">üß™ Laboratory Values (24-hour)</h3>
+
+                    <div class="input-group">
+                        <label>Creatinine Max (mg/dL)</label>
+                        <input type="number" id="cr_max_24h" value="0.8" min="0.1" max="15" step="0.1">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Hemoglobin Min (g/dL)</label>
+                        <input type="number" id="hgb_min_24h" value="10" min="4" max="18" step="0.1">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Sodium Min (mEq/L)</label>
+                        <input type="number" id="sodium_min_24h" value="137" min="110" max="160" step="1">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Potassium Max (mEq/L)</label>
+                        <input type="number" id="potassium_max_24h" value="4.3" min="2.5" max="7" step="0.1">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Bicarbonate Min (mEq/L)</label>
+                        <input type="number" id="bicarb_min_24h" value="23" min="10" max="40" step="1">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Platelets Min (K/ŒºL)</label>
+                        <input type="number" id="plt_min_24h" value="194" min="20" max="600" step="1">
+                    </div>
+
+                    <div class="input-group">
+                        <label>INR Max</label>
+                        <input type="number" id="inr_max_24h" value="1.2" min="0.8" max="10" step="0.1">
+                    </div>
+
+                    <!-- Fluid Balance -->
+                    <h3 class="section-title">üíß Fluid Balance (24-hour)</h3>
+
+                    <div class="input-group">
+                        <label>Fluid Intake (mL)</label>
+                        <input type="number" id="input_amount_24h" value="7571" min="0" max="50000" step="100">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Urine Output (mL)</label>
+                        <input type="number" id="output_ml_24h" value="2865" min="0" max="20000" step="100">
+                    </div>
+                </div>
+
+                <button type="submit" class="calculate-btn">Calculate Risk</button>
+            </form>
+
+            <div class="result-section" id="resultSection">
+                <div class="result-card">
+                    <div class="risk-label">Predicted 72-Hour Complication Risk</div>
+                    <div class="risk-value" id="riskValue">0%</div>
+                    <div class="risk-bar-container">
+                        <div class="risk-bar" id="riskBar"></div>
+                    </div>
+                    <div class="risk-category" id="riskCategory">Low Risk</div>
+                </div>
+
+                <div class="interpretation">
+                    <h3>üìä Interpretation</h3>
+                    <p id="interpretationText"></p>
+                </div>
+            </div>
+
+            <div class="disclaimer">
+                ‚ö†Ô∏è <strong>Disclaimer:</strong> This calculator is for research purposes only.
+                Clinical decisions should not be based solely on this tool.
+                Always use clinical judgment and consult with appropriate specialists.
+            </div>
+
+            <div class="reference">
+                Model: Logistic Regression | AUROC: 0.732 | Based on MIMIC-IV ICU data (n=910)
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Model parameters (embedded from Python extraction)
+        const modelParams = {
+            intercept: -0.08702026934121689,
+            coefficients: {
+                anchor_age: 0.04207487715724678,
+                cci: 0.030517714899681248,
+                heart_rate_mean: 0.1361283832052793,
+                mbp_mean: -0.1550211938846059,
+                spo2_mean: -0.3882113305007591,
+                resp_rate_mean: 0.056936807869776056,
+                cr_max_24h: 0.5442128567822863,
+                hgb_min_24h: -0.13323752871084052,
+                sodium_min_24h: -0.15924056873602982,
+                potassium_max_24h: 0.046632960286126776,
+                bicarb_min_24h: -0.20294092766645047,
+                plt_min_24h: -0.12832523182905936,
+                inr_max_24h: 0.13112500630481722,
+                pressor_24h: 0.0,
+                transfusion_24h: 0.0,
+                input_amount_24h: -0.22285036410412482,
+                output_ml_24h: -0.04897194102039719,
+                gender_male: 0.15622747801388023
+            },
+            scalerMeans: {
+                anchor_age: 60.486656200941916,
+                cci: 4.0926216640502355,
+                heart_rate_mean: 86.001598387708,
+                mbp_mean: 81.32224156656201,
+                spo2_mean: 97.44055104695448,
+                resp_rate_mean: 17.756383580376767,
+                cr_max_24h: 1.0777080062794349,
+                hgb_min_24h: 10.057927786499215,
+                sodium_min_24h: 136.73940345368916,
+                potassium_max_24h: 4.354160125588698,
+                bicarb_min_24h: 23.331240188383045,
+                plt_min_24h: 206.60125588697016,
+                inr_max_24h: 1.2617111459968602,
+                pressor_24h: 0.0,
+                transfusion_24h: 0.0,
+                input_amount_24h: 9172.885424522976,
+                output_ml_24h: 3375.6350078492937,
+                gender_male: 0.5667189952904239
+            },
+            scalerStds: {
+                anchor_age: 16.020940798780654,
+                cci: 3.1492281384254968,
+                heart_rate_mean: 15.555745799797851,
+                mbp_mean: 10.435368730324406,
+                spo2_mean: 1.755283128916132,
+                resp_rate_mean: 3.3714533016127324,
+                cr_max_24h: 0.9380191006088384,
+                hgb_min_24h: 1.8343112458761008,
+                sodium_min_24h: 4.377181622162218,
+                potassium_max_24h: 0.6803839017750543,
+                bicarb_min_24h: 3.7309659946375233,
+                plt_min_24h: 96.15717378665123,
+                inr_max_24h: 0.32421922843367545,
+                pressor_24h: 1.0,
+                transfusion_24h: 1.0,
+                input_amount_24h: 7983.496019810347,
+                output_ml_24h: 2300.983609002906,
+                gender_male: 0.4955285820893043
+            }
+        };
+
+        // Feature order (must match training)
+        const featureOrder = [
+            'anchor_age', 'cci', 'heart_rate_mean', 'mbp_mean', 'spo2_mean',
+            'resp_rate_mean', 'cr_max_24h', 'hgb_min_24h', 'sodium_min_24h',
+            'potassium_max_24h', 'bicarb_min_24h', 'plt_min_24h', 'inr_max_24h',
+            'pressor_24h', 'transfusion_24h', 'input_amount_24h', 'output_ml_24h',
+            'gender_male'
+        ];
+
+        // Sigmoid function
+        function sigmoid(x) {
+            return 1 / (1 + Math.exp(-x));
+        }
+
+        // Toggle CCI calculator visibility
+        function toggleCCI() {
+            const cciCalc = document.getElementById('cciCalculator');
+            const toggle = document.querySelector('.cci-toggle');
+            if (cciCalc.style.display === 'none') {
+                cciCalc.style.display = 'block';
+                toggle.textContent = '[Click to Hide ‚ñ≤]';
+            } else {
+                cciCalc.style.display = 'none';
+                toggle.textContent = '[Click to Calculate ‚ñº]';
+            }
+        }
+
+        // Update CCI based on checkboxes
+        function updateCCI() {
+            const checkboxes = document.querySelectorAll('.cci-item');
+            let total = 0;
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    total += parseInt(cb.getAttribute('data-points'));
+                }
+            });
+            document.getElementById('cci').value = total;
+            document.getElementById('cciTotal').textContent = total;
+        }
+
+        // Calculate risk
+        function calculateRisk(values) {
+            let logOdds = modelParams.intercept;
+
+            for (const feature of featureOrder) {
+                // Standardize the value
+                const rawValue = values[feature] || 0;
+                const mean = modelParams.scalerMeans[feature];
+                const std = modelParams.scalerStds[feature];
+                const standardizedValue = (rawValue - mean) / std;
+
+                // Add to log odds
+                logOdds += modelParams.coefficients[feature] * standardizedValue;
+            }
+
+            // Convert to probability
+            const probability = sigmoid(logOdds);
+            return probability;
+        }
+
+        // Form submission
+        document.getElementById('riskForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Collect values
+            const values = {
+                anchor_age: parseFloat(document.getElementById('anchor_age').value),
+                cci: parseFloat(document.getElementById('cci').value),
+                heart_rate_mean: parseFloat(document.getElementById('heart_rate_mean').value),
+                mbp_mean: parseFloat(document.getElementById('mbp_mean').value),
+                spo2_mean: parseFloat(document.getElementById('spo2_mean').value),
+                resp_rate_mean: parseFloat(document.getElementById('resp_rate_mean').value),
+                cr_max_24h: parseFloat(document.getElementById('cr_max_24h').value),
+                hgb_min_24h: parseFloat(document.getElementById('hgb_min_24h').value),
+                sodium_min_24h: parseFloat(document.getElementById('sodium_min_24h').value),
+                potassium_max_24h: parseFloat(document.getElementById('potassium_max_24h').value),
+                bicarb_min_24h: parseFloat(document.getElementById('bicarb_min_24h').value),
+                plt_min_24h: parseFloat(document.getElementById('plt_min_24h').value),
+                inr_max_24h: parseFloat(document.getElementById('inr_max_24h').value),
+                pressor_24h: 0,  // Default to 0 (no vasopressor)
+                transfusion_24h: 0,  // Default to 0 (no transfusion)
+                input_amount_24h: parseFloat(document.getElementById('input_amount_24h').value),
+                output_ml_24h: parseFloat(document.getElementById('output_ml_24h').value),
+                gender_male: parseInt(document.getElementById('gender_male').value)
+            };
+
+            // Calculate risk
+            const risk = calculateRisk(values);
+            const riskPercent = (risk * 100).toFixed(1);
+
+            // Display result
+            const resultSection = document.getElementById('resultSection');
+            const riskValue = document.getElementById('riskValue');
+            const riskBar = document.getElementById('riskBar');
+            const riskCategory = document.getElementById('riskCategory');
+            const interpretationText = document.getElementById('interpretationText');
+
+            resultSection.style.display = 'block';
+            riskValue.textContent = riskPercent + '%';
+            riskBar.style.width = riskPercent + '%';
+
+            // Determine risk category
+            let category, colorClass, barColor, interpretation;
+            if (risk < 0.20) {
+                category = 'Low Risk';
+                colorClass = 'risk-low';
+                barColor = '#00ff88';
+                interpretation = `This patient has a LOW predicted risk of 72-hour postoperative complications. 
+                    The predicted probability (${riskPercent}%) is below the cohort average of 30.5%. 
+                    Standard postoperative monitoring may be appropriate.`;
+            } else if (risk < 0.40) {
+                category = 'Moderate Risk';
+                colorClass = 'risk-moderate';
+                barColor = '#ffcc00';
+                interpretation = `This patient has a MODERATE predicted risk of 72-hour postoperative complications. 
+                    The predicted probability (${riskPercent}%) suggests closer monitoring may be warranted. 
+                    Consider more frequent vital sign checks and laboratory monitoring.`;
+            } else {
+                category = 'High Risk';
+                colorClass = 'risk-high';
+                barColor = '#ff6b6b';
+                interpretation = `This patient has a HIGH predicted risk of 72-hour postoperative complications. 
+                    The predicted probability (${riskPercent}%) is well above the cohort average. 
+                    Enhanced monitoring, early specialist involvement, and proactive interventions should be considered.`;
+            }
+
+            riskValue.className = 'risk-value ' + colorClass;
+            riskCategory.className = 'risk-category category-' + category.split(' ')[0].toLowerCase();
+            riskCategory.textContent = category;
+            riskBar.style.background = `linear-gradient(90deg, ${barColor}, ${barColor}88)`;
+            interpretationText.textContent = interpretation;
+
+            // Scroll to results
+            resultSection.scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+</body>
+
+</html>! *cascade08!"*cascade08"é *cascade08éñ*cascade08ñ„ *cascade08„Î*cascade08Îå *cascade08åò*cascade08ò® *cascade08®∞*cascade08∞≤ *cascade08≤≥*cascade08≥Ã *cascade08Ãÿ*cascade08ÿË *cascade08Ë*cascade08Ú *cascade08ÚÛ*cascade08Ûà  *cascade08à î *cascade08î §  *cascade08§ ¨ *cascade08¨ ™" *cascade08™"∂"*cascade08∂"⁄" *cascade08⁄"Ê"*cascade08Ê"ˆ" *cascade08ˆ"˛"*cascade08˛"Ä# *cascade08Ä#Å#*cascade08Å#û# *cascade08û#™#*cascade08™#Œ# *cascade08Œ#⁄#*cascade08⁄#Í# *cascade08Í#Ú#*cascade08Ú#Ù# *cascade08Ù#ı#*cascade08ı#é$ *cascade08é$ö$*cascade08ö$¿$ *cascade08¿$Ã$*cascade08Ã$‹$ *cascade08‹$‰$*cascade08‰$√- *cascade08√-∑4*cascade08∑4Ã4 *cascade08Ã4Õ4*cascade08Õ4ú8 *cascade08ú8ú8*cascade08ú8˛9 *cascade08˛9˛9*cascade08˛9¡< *cascade08¡<¡<*cascade08¡<®= *cascade08®=Ü?*cascade08Ü?Ã? *cascade08Ã?‹?*cascade08‹?›? *cascade08›?ﬁ?*cascade08ﬁ?‡? *cascade08‡?‹A*cascade08‹A›A *cascade08›AÈA*cascade08ÈAÍA *cascade08ÍAÒA*cascade08ÒAÚA *cascade08ÚA∑B*cascade08∑BπB *cascade08πB÷B*cascade08÷B◊B *cascade08◊BßC*cascade08ßC®C *cascade08®C‡C*cascade08‡C„C *cascade08„CÛC*cascade08ÛCÙC *cascade08ÙCßE*cascade08ßE©E *cascade08©EÁE*cascade08ÁEËE *cascade08ËEÈE*cascade08ÈEÍE *cascade08ÍEˇE*cascade08ˇEÄF *cascade08ÄFåF*cascade08åFçF *cascade08çF∏F*cascade08∏FπF *cascade08πFˇF*cascade08ˇFÄG *cascade08ÄGÑG*cascade08ÑGÖG *cascade08ÖGßG*cascade08ßG®G *cascade08®G≠G*cascade08≠G±G *cascade08±GÎk*cascade08ÎkÜm *cascade08ÜmÜm*cascade08ÜmÚn *cascade08ÚnÚn*cascade08Ún·p *cascade08·p·p*cascade08·pŒr *cascade08ŒrŒr*cascade08Œr¬u *cascade08¬u¬u*cascade08¬u≤w *cascade08≤w≤w*cascade08≤wüy *cascade08üyüy*cascade08üyé{ *cascade08é{é{*cascade08é{É} *cascade08É}É}*cascade08É}Ù~ *cascade08Ù~Ù~*cascade08Ù~‚Ä *cascade08‚Ä‚Ä*cascade08‚Ä¿É *cascade08¿É¿É*cascade08¿É≥Ö *cascade08≥Ö≥Ö*cascade08≥Ö»¨ *cascade08»¨¬¥*cascade08¬¥¨µ *cascade08¨µ¨µ*cascade08¨µ˛∑ *cascade08˛∑˛∑*cascade08˛∑Çπ *cascade08ÇπÇπ*cascade08ÇπÔ∫ *cascade08Ô∫∫*cascade08∫óª *cascade08óªóª*cascade08óªÌ« *cascade08Ì«Ì«*cascade08Ì«ı» *cascade08ı»ı»*cascade08ı»ÑÃ *cascade08ÑÃÑÃ*cascade08ÑÃ§Õ *cascade08§Õ§Õ*cascade08§ÕîŸ *cascade08îŸîŸ*cascade08îŸÖ‹ *cascade08Ö‹Ö‹*cascade08Ö‹ä› *cascade08ä›ã›*cascade08ã›í› *cascade082Cfile:///Users/angel/Antigravity/spine_analysis/risk_calculator.html
