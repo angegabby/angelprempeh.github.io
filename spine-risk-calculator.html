@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spine Surgery ICU Risk Calculator</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="app-icon.svg">
+    <link rel="apple-touch-icon" href="app-icon.svg">
+    <meta name="theme-color" content="#003366">
     <style>
         body {
             font-family: Georgia, 'Times New Roman', Times, serif;
@@ -276,8 +280,7 @@
             <div class="description">
                 This tool predicts the probability of 72-hour postoperative complications (Acute Kidney Injury,
                 Mechanical Ventilation, or Mortality) using granular physiologic and laboratory data from the first 24
-                hours of ICU admission. The model was developed and validated using the MIMIC-IV database (Prempeh et
-                al.).
+                hours of ICU admission. The model was developed and validated using the MIMIC-IV database.
             </div>
         </header>
 
@@ -459,7 +462,7 @@
             <div id="riskValue" class="risk-score">--%</div>
             <p class="interpretation">
                 <strong>Interpretation:</strong> This patient falls into the <span id="riskTierText">--</span> risk
-                category based on the logistic regression model validated in <em>Prempeh et al.</em>
+                category based on the logistic regression model validated in <em>the validation study</em>
             </p>
         </div>
 
