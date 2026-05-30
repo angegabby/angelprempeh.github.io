@@ -221,7 +221,7 @@ h2, h3 {
 }
 
 .project-content p {
-    font-size: clamp(1rem, 1.8vw, 1.15rem);
+    font-size: clamp(1.25rem, 2.3vw, 1.4rem);
     line-height: 1.7;
     color: var(--text-gray);
 }
@@ -254,7 +254,7 @@ h2, h3 {
 }
 
 .activity-card p {
-    font-size: clamp(1rem, 1.8vw, 1.15rem);
+    font-size: clamp(1.25rem, 2.3vw, 1.4rem);
     line-height: 1.6;
     color: var(--text-gray);
 }
