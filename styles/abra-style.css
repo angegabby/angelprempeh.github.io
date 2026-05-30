@@ -35,6 +35,7 @@ body {
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     font-size: clamp(1rem, 1.2vw + 0.5rem, 1.15rem);
+    overflow-x: hidden;
 }
 
 /* === HEADER === */
@@ -60,6 +61,7 @@ body {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+    white-space: nowrap;
 }
 
 .menu-toggle {
@@ -132,6 +134,7 @@ body {
     font-weight: 700;
     color: var(--text-dark);
     margin-bottom: 0.5rem;
+    white-space: nowrap;
 }
 
 .hero-title {
