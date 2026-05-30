@@ -444,7 +444,7 @@ footer p {
 
 .extra-projects-list li {
     margin-bottom: 1.25rem;
-    font-size: 1.05rem;
+    font-size: clamp(1.15rem, 2vw, 1.3rem);
     color: var(--text-dark);
     line-height: 1.5;
 }
