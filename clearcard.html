@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClearCard | Angel G. A. Prempeh</title>
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles/abra-style.css">
+  <style>
+    .article-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+      line-height: 1.6;
+    }
+    .article-container h1 { margin-bottom: 1rem; color: var(--primary-color); }
+    .article-container h2 { margin-top: 2rem; margin-bottom: 1rem; }
+    .article-container h3 { margin-top: 1.5rem; margin-bottom: 0.5rem; }
+    .article-container p { margin-bottom: 1rem; }
+    .article-container ul { margin-bottom: 1rem; padding-left: 2rem; }
+    .article-container li { margin-bottom: 0.5rem; }
+    .article-container hr { margin: 2rem 0; border: 0; border-top: 1px solid #eee; }
+    .article-container img { max-width: 100%; border-radius: 8px; margin-bottom: 2rem; }
+    .references { font-size: 0.9rem; color: #666; }
+    .references p { margin-bottom: 0.5rem; }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header id="header">
+    <button class="menu-toggle" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <h1 class="site-title"><a href="index.html" style="text-decoration: none; color: inherit;">Angel G. A. Prempeh</a></h1>
+    <nav class="main-nav">
+      <a href="index.html#about">About Me</a>
+      <a href="index.html#projects">Projects</a>
+      <a href="index.html#activities">Activities</a>
+      <a href="index.html#publications">Publications</a>
+    </nav>
+  </header>
+
+  <main class="article-container">
+    <img src="images/clearcard-hero.png" alt="ClearCard Hero Image">
+    <h1>ClearCard: AI-Powered Surgical Preference Card Optimization</h1>
+    
+    <h2>The Problem</h2>
+    <p>Before the patient enters the operating room, staff open instruments, drapes, implants, and supplies based on a document called a surgeon preference card. These cards are meant to specify exactly what each surgeon needs for each procedure type. In practice, they are outdated, overstocked, and never audited against what surgeons actually use.</p>
+    <p>The result is predictable; some supplies get opened that are never touched. Once a sterile item is opened, it cannot be restocked, hence, it is discarded. This waste accumulates across thousands of operating rooms every day.</p>
+    <p>The data is clear:</p>
+    <ul>
+      <li>Inaccurate preference cards generate $5 billion in unnecessary supply waste annually across U.S. healthcare [3].</li>
+      <li>Surgeon preference cards contain 20-40% more supplies than needed per case [4].</li>
+      <li>Wasted disposable supplies account for $50-$150 per routine case [5].</li>
+      <li>85% of OR waste comes from individual disposable items, which means waste is concentrated in exactly the items preference cards control [5].</li>
+    </ul>
+    <p>The root cause is not surgeon carelessness. Studies show that when surgeons receive pricing transparency and usage data, they make better decisions about what belongs on their cards [5]. The problem is that the system provides no feedback. Most surgeons have never seen a breakdown of what was opened versus what was used in their cases.</p>
+    <p>The data needed to close this gap does not exist in usable form. Electronic health records and billing systems were not built to capture item-level intraoperative usage. Published studies on OR waste have relied on manual observation, which is costly and impossible to sustain at scale [5]. Without reliable usage data, preference cards cannot be updated systematically.</p>
+    <p>This is problem ClearCard solves.</p>
+
+    <hr>
+
+    <h2>What We Are Building</h2>
+    <p>ClearCard is an AI-powered platform that identifies waste in surgeon preference cards by analyzing how surgeons actually operate and generates updated recommendations with cost savings estimates.</p>
+    <p>Designed for ambulatory surgery centers, ClearCard works with data ASCs already generate. No new hardware. No EHR vendor integration. No additional IT infrastructure.</p>
+    
+    <h3>1. Flexible Data Intake</h3>
+    <p>ClearCard requires three inputs:</p>
+    <ul>
+      <li>Preference cards: Existing surgeon-specific supply templates for each procedure</li>
+      <li>Case usage records: Billing or EHR exports showing what was actually opened and consumed per case</li>
+      <li>Item cost catalog: Standard supply pricing for financial calculations</li>
+    </ul>
+    <p>An ASC uploads existing CSV exports and is onboarded in a single afternoon.</p>
+
+    <h3>2. AI Reasoning Engine</h3>
+    <p>ClearCard reconciles what the preference card planned against what the surgeon actually used across all historical cases. For each item, the engine calculates:</p>
+    <ul>
+      <li>Usage frequency: How often did this surgeon use this item across all cases of this procedure?</li>
+      <li>Quantity delta: How many units were opened versus consumed on average?</li>
+      <li>Waste classification: Remove entirely, mark as "Hold" (available but not opened unless requested), or reduce quantity?</li>
+      <li>Cost impact: Annual savings if the recommendation is implemented?</li>
+    </ul>
+    <p>ClearCard distinguishes between "Open" items (placed on the sterile field before the patient enters) and "Hold" items (physically present but not opened unless the surgeon requests). This preserves clinical safety for rarely needed items while eliminating unnecessary waste.</p>
+    <p>Every recommendation includes a plain-language explanation and confidence score based on dataset size and behavioral consistency.</p>
+
+    <h3>3. Dashboard and Clinician Review</h3>
+    <p>ClearCard presents findings through an actionable interface:</p>
+    <ul>
+      <li>Facility-level summary: Total projected annual savings, flagged cards, and opportunities ranked by financial impact</li>
+      <li>Side-by-side card view: Current card next to recommended version with each change explained</li>
+      <li>Surgeon and procedure analytics: Which surgeons have the biggest card-to-behavior gaps and which procedures generate the most waste</li>
+      <li>Human approval required: Every recommendation must be explicitly accepted by operations staff or a clinician before implementation</li>
+    </ul>
+
+    <hr>
+
+    <h2>Why This Approach Is Different</h2>
+    <p>Most solutions in surgical supply chain management focus on inventory management after supplies have been opened. These approaches manage the consequences of waste.</p>
+    <p>ClearCard intervenes at the point where waste originates: the preference card. By addressing the root cause before the sterile seal is broken, ClearCard eliminates waste at its source.</p>
+    <p>ClearCard operates on data ASCs already possess. It requires no hardware deployment, no OR cameras, and no on-site implementation team. The barrier to adoption is low, and the financial return is measurable from the first week.</p>
+    <p>For an ASC performing 10 orthopedic joint replacement cases per week, per-case savings of $50-$150 represent $26,000-$78,000 in annual recoverable waste.</p>
+
+    <hr>
+
+    <div class="references">
+      <h2>References</h2>
+      <p>[1] Weiss A, et al. Environmentalism in surgical practice. Curr Probl Surg. 2016;53(4):165-205.</p>
+      <p>[2] de Sa D, et al. The direct environmental impact of hip arthroscopy for femoroacetabular impingement: a surgical waste audit of five cases. J Hip Preserv Surg. 2016;3(2):132-137.</p>
+      <p>[3] Medtronic / Integrated Health Solutions. Surgeon Preference Cards: A $5 Billion Problem. medtronic.com/us-en/transforming-healthcare/aligning-value/perspective/case-studies/ihs-surgeon-preference-cards.html</p>
+      <p>[4] Moons K, et al. Measuring the logistics performance of internal hospital supply chains: a literature study. Omega. 2018.</p>
+      <p>[5] Zygourakis CC, et al. Operating room waste: disposable supply utilization in neurosurgical procedures. J Neurosurg. 2017 Feb;126(2):620-625.</p>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Angel G. A. Prempeh. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    const menuToggle = document.querySelector('.menu-toggle');
+    const mainNav = document.querySelector('.main-nav');
+    menuToggle.addEventListener('click', () => {
+      mainNav.classList.toggle('active');
+      menuToggle.classList.toggle('active');
+    });
+  </script>
+</body>
+</html>
