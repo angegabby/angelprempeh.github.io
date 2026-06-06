@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="styles/abra-style.css">
   <style>
     .article-container {
-      max-width: 800px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: 4rem 2rem;
       line-height: 1.6;
@@ -46,9 +46,10 @@
 
   <main class="article-container">
     <img src="images/clearcard-hero.png" alt="ClearCard Hero Image">
-    <h1>ClearCard: AI-Powered Surgical Preference Card Optimization</h1>
+    <h1 style="color: var(--gold); margin-bottom: 0.25rem;">ClearCard</h1>
+    <h2 style="font-size: 1.5rem; color: var(--navy); margin-top: 0; margin-bottom: 2rem; font-weight: 500;">An AI-powered surgical preference card optimization</h2>
     
-    <h2>The Problem</h2>
+    <h2 style="margin-top: 0;">The Problem</h2>
     <p>Before the patient enters the operating room, staff open instruments, drapes, implants, and supplies based on a document called a surgeon preference card. These cards are meant to specify exactly what each surgeon needs for each procedure type. In practice, they are outdated, overstocked, and never audited against what surgeons actually use.</p>
     <p>The result is predictable; some supplies get opened that are never touched. Once a sterile item is opened, it cannot be restocked, hence, it is discarded. This waste accumulates across thousands of operating rooms every day.</p>
     <p>The data is clear:</p>
@@ -68,34 +69,41 @@
     <p>ClearCard is an AI-powered platform that identifies waste in surgeon preference cards by analyzing how surgeons actually operate and generates updated recommendations with cost savings estimates.</p>
     <p>Designed for ambulatory surgery centers, ClearCard works with data ASCs already generate. No new hardware. No EHR vendor integration. No additional IT infrastructure.</p>
     
-    <h3>1. Flexible Data Intake</h3>
-    <p>ClearCard requires three inputs:</p>
-    <ul>
-      <li>Preference cards: Existing surgeon-specific supply templates for each procedure</li>
-      <li>Case usage records: Billing or EHR exports showing what was actually opened and consumed per case</li>
-      <li>Item cost catalog: Standard supply pricing for financial calculations</li>
-    </ul>
-    <p>An ASC uploads existing CSV exports and is onboarded in a single afternoon.</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem; margin-bottom: 2rem;">
+      <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-light);">
+        <h3 style="color: var(--navy); margin-top: 0;">Flexible Data Intake</h3>
+        <p>ClearCard requires three inputs:</p>
+        <ul style="padding-left: 1.25rem;">
+          <li>Preference cards: Existing surgeon-specific supply templates for each procedure</li>
+          <li>Case usage records: Billing or EHR exports showing what was actually opened and consumed per case</li>
+          <li>Item cost catalog: Standard supply pricing for financial calculations</li>
+        </ul>
+        <p>An ASC uploads existing CSV exports and is onboarded in a single afternoon.</p>
+      </div>
 
-    <h3>2. AI Reasoning Engine</h3>
-    <p>ClearCard reconciles what the preference card planned against what the surgeon actually used across all historical cases. For each item, the engine calculates:</p>
-    <ul>
-      <li>Usage frequency: How often did this surgeon use this item across all cases of this procedure?</li>
-      <li>Quantity delta: How many units were opened versus consumed on average?</li>
-      <li>Waste classification: Remove entirely, mark as "Hold" (available but not opened unless requested), or reduce quantity?</li>
-      <li>Cost impact: Annual savings if the recommendation is implemented?</li>
-    </ul>
-    <p>ClearCard distinguishes between "Open" items (placed on the sterile field before the patient enters) and "Hold" items (physically present but not opened unless the surgeon requests). This preserves clinical safety for rarely needed items while eliminating unnecessary waste.</p>
-    <p>Every recommendation includes a plain-language explanation and confidence score based on dataset size and behavioral consistency.</p>
+      <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-light);">
+        <h3 style="color: var(--navy); margin-top: 0;">AI Reasoning Engine</h3>
+        <p>ClearCard reconciles what the preference card planned against what the surgeon actually used across all historical cases. For each item, the engine calculates:</p>
+        <ul style="padding-left: 1.25rem;">
+          <li>Usage frequency: How often did this surgeon use this item across all cases of this procedure?</li>
+          <li>Quantity delta: How many units were opened versus consumed on average?</li>
+          <li>Waste classification: Remove entirely, mark as "Hold" (available but not opened unless requested), or reduce quantity?</li>
+          <li>Cost impact: Annual savings if the recommendation is implemented?</li>
+        </ul>
+        <p>ClearCard distinguishes between "Open" items and "Hold" items. Every recommendation includes a plain-language explanation and confidence score.</p>
+      </div>
 
-    <h3>3. Dashboard and Clinician Review</h3>
-    <p>ClearCard presents findings through an actionable interface:</p>
-    <ul>
-      <li>Facility-level summary: Total projected annual savings, flagged cards, and opportunities ranked by financial impact</li>
-      <li>Side-by-side card view: Current card next to recommended version with each change explained</li>
-      <li>Surgeon and procedure analytics: Which surgeons have the biggest card-to-behavior gaps and which procedures generate the most waste</li>
-      <li>Human approval required: Every recommendation must be explicitly accepted by operations staff or a clinician before implementation</li>
-    </ul>
+      <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-light);">
+        <h3 style="color: var(--navy); margin-top: 0;">Dashboard and Clinician Review</h3>
+        <p>ClearCard presents findings through an actionable interface:</p>
+        <ul style="padding-left: 1.25rem;">
+          <li>Facility-level summary: Total projected annual savings, flagged cards, and opportunities ranked by financial impact</li>
+          <li>Side-by-side card view: Current card next to recommended version with each change explained</li>
+          <li>Surgeon and procedure analytics: Which surgeons have the biggest card-to-behavior gaps</li>
+          <li>Human approval required: Every recommendation must be explicitly accepted by operations staff or a clinician before implementation</li>
+        </ul>
+      </div>
+    </div>
 
     <hr>
 
