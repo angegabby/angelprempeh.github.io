@@ -25,16 +25,6 @@
     .references { font-size: 0.9rem; color: #666; }
     .references p { margin-bottom: 0.5rem; }
   </style>
-  <script type="module">
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-    mermaid.initialize({ 
-      startOnLoad: true, 
-      theme: 'dark', 
-      themeVariables: { 
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
-      } 
-    });
-  </script>
 </head>
 
 <body>
@@ -119,43 +109,8 @@
 
     <h3 style="text-align: center; color: var(--navy); margin-top: 3rem; margin-bottom: 2rem;">End-to-End Workflow</h3>
     
-    <div style="background: #1c1c1e; padding: 2rem; border-radius: 12px; margin-bottom: 4rem; overflow-x: auto;">
-      <div class="mermaid" style="display: flex; justify-content: center;">
-        graph TD
-          classDef input fill:#ffffff,stroke:#c9a961,stroke-width:3px,color:#1d1d1f,rx:4px,ry:4px
-          classDef engine fill:#002B5C,stroke:#002B5C,stroke-width:2px,color:#ffffff,rx:4px,ry:4px,font-weight:bold
-          classDef output fill:#e2f0f9,stroke:#0071E3,stroke-width:3px,color:#1d1d1f,rx:4px,ry:4px
-          classDef action fill:#c9a961,stroke:#c9a961,stroke-width:2px,color:#ffffff,rx:30px,ry:30px,font-weight:bold
-
-          subgraph Inputs ["1. Data Ingestion (Existing ASC Data)"]
-              A["Old Preference Cards<br/>(What was planned)"]:::input
-              B["Case Usage Records<br/>(What was actually opened)"]:::input
-              C["Supply Cost Catalog<br/>(Pricing data)"]:::input
-          end
-
-          subgraph Processing ["2. AI Analysis"]
-              D{"ClearCard AI<br/>Reasoning Engine"}:::engine
-          end
-
-          subgraph Review ["3. Clinician Dashboard"]
-              E["Financial Savings Tracker"]:::output
-              F["Side-by-Side Card Comparison"]:::output
-          end
-
-          subgraph Result ["4. Deployment"]
-              G(["Optimized Preference Card<br/>Ready for OR"]):::action
-          end
-
-          C --> D
-          A --> D
-          B --> D
-          
-          D -->|"Calculates Waste & Cost Impact"| E
-          D -->|"Recommends 'Hold' vs 'Open'"| F
-          
-          E --> G
-          F -->|"Surgeon/Staff Approves"| G
-      </div>
+    <div style="display: flex; justify-content: center; margin-bottom: 4rem;">
+      <img src="images/clearcard_workflow.png" alt="ClearCard Workflow Schematic" style="max-width: 100%; height: auto; border: 1px solid var(--border-light); padding: 1rem; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
     </div>
 
     <hr>
