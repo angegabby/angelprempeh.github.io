@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Physics Behind the Model | Angel G. A. Prempeh</title>
+  <meta name="description"
+    content="The full biomechanical math and physics behind the surgeon back-exoskeleton model: a 3D quasi-static musculoskeletal model of the L4-L5 spine, static optimization of muscle forces, and cumulative spinal load.">
+  <link rel="stylesheet" href="styles/abra-style.css">
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['$$', '$$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js" async></script>
+  <style>
+    .article-container { max-width: 860px; margin: 0 auto; padding: 4rem 2rem; line-height: 1.7; }
+    .article-container h1 { margin-bottom: 0.5rem; color: var(--primary-color); }
+    .article-container h2 { margin-top: 2.75rem; margin-bottom: 0.75rem; color: var(--navy); border-bottom: 1px solid #eef0f2; padding-bottom: 0.4rem; }
+    .article-container h3 { margin-top: 1.75rem; margin-bottom: 0.4rem; color: var(--navy); font-size: 1.15rem; }
+    .article-container p { margin-bottom: 1rem; }
+    .article-container ul { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .article-container li { margin-bottom: 0.4rem; }
+    .lead { font-size: 1.12rem; color: #444; }
+    .eq { background: #fafbfc; border: 1px solid #eef0f2; border-left: 4px solid var(--gold, #C8A24B); border-radius: 8px; padding: 0.5rem 1.25rem; margin: 1.25rem 0; overflow-x: auto; }
+    .plain { background: #f6f8fb; border-radius: 8px; padding: 0.9rem 1.2rem; margin: 1rem 0; font-size: 0.96rem; color: #3a4654; }
+    .plain strong { color: var(--navy); }
+    table { border-collapse: collapse; width: 100%; margin: 1.25rem 0; font-size: 0.92rem; }
+    th, td { border: 1px solid #e6e8eb; padding: 0.5rem 0.7rem; text-align: left; }
+    th { background: var(--bg-light, #f6f7f9); color: var(--navy); font-weight: 600; }
+    .toc { background: #fbfbfc; border: 1px solid #eee; border-radius: 8px; padding: 1.25rem 1.5rem; margin: 2rem 0; }
+    .toc h3 { margin-top: 0; }
+    .toc ol { margin: 0; padding-left: 1.3rem; }
+    .toc a { color: var(--navy); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+    .backlink { display: inline-block; margin-bottom: 1.5rem; color: var(--navy); font-weight: 500; text-decoration: none; }
+    .backlink:hover { text-decoration: underline; }
+    .references { font-size: 0.88rem; color: #666; }
+    .references p { margin-bottom: 0.4rem; }
+    .callout { background: linear-gradient(135deg, var(--navy, #002D62) 0%, #013a7d 100%); color: #fff; border-radius: 12px; padding: 1.5rem 1.75rem; margin: 2rem 0; }
+    .callout a { color: var(--gold, #C8A24B); font-weight: 600; text-decoration: none; }
+  </style>
+</head>
+
+<body>
+  <header id="header">
+    <button class="menu-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    <h1 class="site-title"><a href="index.html" style="text-decoration: none; color: inherit;">Angel G. A. Prempeh</a></h1>
+    <nav class="main-nav">
+      <a href="index.html#about">About Me</a>
+      <a href="index.html#projects">Projects</a>
+      <a href="index.html#activities">Activities</a>
+      <a href="index.html#publications">Publications</a>
+    </nav>
+  </header>
+
+  <main class="article-container">
+    <a href="protecting-the-surgeons-back.html" class="backlink">&larr; Back to the calculator</a>
+
+    <h1 style="color: var(--gold); font-size: 2.75rem;">The Physics Behind the Model</h1>
+    <p class="lead">How a bent-over posture becomes a number for the load on a surgeon's spine, and how a passive exoskeleton changes that number. This page lays out the full biomechanical model: every assumption, every equation, and the plain-English idea behind each one.</p>
+
+    <div class="toc">
+      <h3>Contents</h3>
+      <ol>
+        <li><a href="#big-picture">The big picture</a></li>
+        <li><a href="#body">Modeling the body above the waist</a></li>
+        <li><a href="#muscles">The muscles that hold you up</a></li>
+        <li><a href="#posture">Turning surgery into a posture trajectory</a></li>
+        <li><a href="#dynamics">Inverse dynamics: the moment to be balanced</a></li>
+        <li><a href="#hill">How strong each muscle can be (Hill model)</a></li>
+        <li><a href="#optimization">Sharing the load: static optimization</a></li>
+        <li><a href="#cocontraction">Co-contraction and stability</a></li>
+        <li><a href="#joint">From muscle forces to disc load and dose</a></li>
+        <li><a href="#exo">The exoskeleton</a></li>
+        <li><a href="#montecarlo">Real-world uncertainty: Monte Carlo</a></li>
+        <li><a href="#results">What the model finds</a></li>
+        <li><a href="#refs">References</a></li>
+      </ol>
+    </div>
+
+    <h2 id="big-picture">1. The big picture</h2>
+    <p>The model is a three-dimensional, quasi-static musculoskeletal model of the L4 to L5 joint, the lumbar level that carries the most load during forward bending. "Quasi-static" means we treat surgery as a slow sequence of held postures, so at every instant the body is close to balance and we can solve for the forces directly rather than simulating fast motion.</p>
+    <p>The logic runs one direction, from posture to load:</p>
+    <div class="plain"><strong>Posture in, spinal load out.</strong> Given how the trunk is oriented at a moment in time, gravity creates a turning effect (a moment) that the back muscles must cancel. We find the muscle forces that do this, then add them up to get the compression squeezing the L4 to L5 disc. Integrate that compression over the length of a case and you get the cumulative "dose" of load on the spine.</div>
+    <p>On top of the deterministic model sits a Monte Carlo layer that repeats the whole calculation across thousands of virtual surgeons and realistic device behavior, so the final numbers come with uncertainty ranges rather than false precision.</p>
+
+    <h2 id="body">2. Modeling the body above the waist</h2>
+    <p>Everything above L4 to L5 presses down on it: the trunk, the head, both arms, and whatever instruments are held. Each segment's mass is a fixed fraction of total body mass, using the de Leva (1996) refinement of the Zatsiorsky and Seluyanov body-segment parameters, with separate values for men and women.</p>
+    <table>
+      <tr><th>Segment</th><th>Mass fraction (male)</th><th>Center-of-mass distance from L4&ndash;L5</th></tr>
+      <tr><td>Trunk (thorax + abdomen)</td><td>~0.306</td><td>0.30 m</td></tr>
+      <tr><td>Head</td><td>0.069</td><td>0.58 m</td></tr>
+      <tr><td>Arms (both, full)</td><td>~0.092</td><td>0.45 m</td></tr>
+      <tr><td>Instruments</td><td>fixed 1.0 kg</td><td>0.55 m</td></tr>
+    </table>
+    <p>Distances and segment lengths scale with the surgeon's height (reference 1.77 m male, 1.63 m female). The disc itself has a cross-sectional area of 18 cm² (Sato 1999), which lets us convert a compressive force into an intradiscal pressure.</p>
+    <div class="plain"><strong>Why distance matters so much.</strong> A segment's contribution to spinal load depends not just on its weight but on how far in front of the spine it sits. The head is light but rides on a long lever (0.58 m), so a dropped head is surprisingly costly.</div>
+
+    <h2 id="muscles">3. The muscles that hold you up</h2>
+    <p>The lumbar musculature is represented by 23 muscle elements: 11 bilateral pairs plus the midline rectus abdominis. Modeled muscles include iliocostalis lumborum, longissimus thoracis, the multifidus at L3, L4 and L5, quadratus lumborum, rectus abdominis, the external and internal obliques, and psoas major.</p>
+    <p>Each muscle carries a physiological cross-sectional area (PCSA) and a 3D moment-arm vector, so a single muscle can produce extension, side-bending, and twisting at the same time. The most a muscle can pull is set by its cross-section:</p>
+    <div class="eq">$$ F_{\max} = \text{PCSA} \times \sigma_{\max}, \qquad \sigma_{\max} = 0.46\ \text{MPa} $$</div>
+    <div class="plain"><strong>In words:</strong> a muscle's maximum force equals its thickness (area) times how hard muscle tissue can pull per unit area. The specific tension \(\sigma_{\max} = 0.46\) MPa is the spine-specific value from Bogduk, Macintosh and Pearcy (1992). The percentage exoskeleton benefit barely moves (about 0.5 points) if this value is changed across a plausible range, even though the absolute forces scale with it.</div>
+    <p>The extensor moment arms are not constant. They vary with flexion angle following a second-order polynomial (Jorgensen et al. 2003), peaking about 12% larger near 25 degrees and shrinking at deeper flexion, which matters because a shorter lever means the muscle must pull harder for the same effect.</p>
+
+    <h2 id="posture">4. Turning surgery into a posture trajectory</h2>
+    <p>A case is represented as a sequence of posture phases (dissection, decompression, instrumentation, correction, closure, and so on). Five canonical postures span the working range in three angle channels: flexion (leaning forward), lateral bend, and axial rotation.</p>
+    <table>
+      <tr><th>Posture</th><th>Flexion</th><th>Lateral</th><th>Rotation</th></tr>
+      <tr><td>P1 neutral</td><td>5&deg;</td><td>0&deg;</td><td>0&deg;</td></tr>
+      <tr><td>P2 mild</td><td>20&deg;</td><td>3&deg;</td><td>5&deg;</td></tr>
+      <tr><td>P3 moderate</td><td>35&deg;</td><td>5&deg;</td><td>5&deg;</td></tr>
+      <tr><td>P4 severe</td><td>50&deg;</td><td>10&deg;</td><td>10&deg;</td></tr>
+      <tr><td>P5 lateral</td><td>30&deg;</td><td>20&deg;</td><td>10&deg;</td></tr>
+    </table>
+    <p>The waypoints are joined with shape-preserving cubic interpolation (PCHIP) so the trunk moves smoothly without overshooting, with 4-second transitions. A gentle sway term (2 degrees at 0.05 to 0.10 Hz) is layered on to mimic the natural micro-movements a standing person never fully suppresses (Szeto et al. 2009). The simulation steps forward in 5-second increments.</p>
+
+    <h2 id="dynamics">5. Inverse dynamics: the moment to be balanced</h2>
+    <p>At each instant, and in each of the three planes, the muscles must produce a net turning moment equal to the sum of what gravity, acceleration, and tissue damping demand:</p>
+    <div class="eq">$$ M_{\text{total},k} = M_{\text{gravity},k} + I_k\,\alpha_k + B_k\,\omega_k, \qquad k \in \{\text{sagittal}, \text{frontal}, \text{transverse}\} $$</div>
+    <p>The dominant term by far is gravity. Each segment above the disc contributes a moment equal to its weight times its lever arm times the sine of the lean angle:</p>
+    <div class="eq">$$ M_{\text{gravity}} = \sum_{i}\, m_i\, g\, d_i\, \sin\theta $$</div>
+    <div class="plain"><strong>This is the heart of it.</strong> Stand upright and \(\theta \approx 0\), so \(\sin\theta \approx 0\) and the muscles barely work. Lean to 60 degrees and \(\sin\theta\) climbs toward 0.87, so the moment, and therefore the muscle force and disc load, rises steeply. The \(I\,\alpha\) term accounts for the small effort of accelerating the trunk, and \(B\,\omega\) (with \(B = 1.5\) Nm·s/rad) for soft-tissue damping. The exoskeleton's assist is subtracted from the sagittal (forward-lean) demand before the muscles are solved.</div>
+
+    <h2 id="hill">6. How strong each muscle can be (Hill model)</h2>
+    <p>A muscle is not equally strong at every length and speed. Each muscle's usable force range is bounded with a three-component Hill-type model (Thelen 2003): an active force-length curve (a Gaussian, widest near the muscle's optimal length), a force-velocity curve (the Hill hyperbola, weaker when shortening quickly), and a passive force-length curve (an exponential spring that resists over-stretch).</p>
+    <p>The trunk angle and its speed are converted into each muscle's normalized fiber length and velocity using its optimal fiber length (Ward et al. 2009). This produces, for every muscle at the current posture, a lower bound (its passive tension) and an upper bound (passive plus maximum active force). Those bounds constrain the next step.</p>
+    <div class="plain"><strong>Why bother:</strong> it prevents the model from asking a muscle to do something it physically cannot at that particular posture and speed, keeping the solution realistic.</div>
+
+    <h2 id="optimization">7. Sharing the load: static optimization</h2>
+    <p>There are 23 muscles but only 3 moment equations to satisfy, so the problem is redundant: many combinations of muscle forces could hold the same posture. The body is assumed to pick an efficient one, and this is modeled by minimizing total muscle stress:</p>
+    <div class="eq">$$ \min_{f} \ \sum_{i} \left( \frac{f_i}{F_{\max,i}} \right)^{n} $$</div>
+    <div class="eq">$$ \text{subject to} \quad \sum_i f_i\, r_{k,i} = M_{\text{req},k} \ \ \text{for each plane } k, \qquad f_{\min,i} \le f_i \le f_{\max,i} $$</div>
+    <div class="plain"><strong>The idea:</strong> spread the work so no muscle is pushed near its limit, because the "cost" of each muscle grows with the square (\(n = 2\)) of how hard it is working relative to its capacity. The three equality constraints force the chosen muscle forces to exactly balance gravity in all three planes; the bounds keep each force inside the Hill limits from step 6.</div>
+    <p>This is the Crowninshield and Brand (1981) load-sharing principle, solved with Sequential Least-Squares Programming using analytic gradients. When a posture is so extreme that no exact solution exists (the muscles are simply at capacity), the model does not crash or return a fake answer. It validates every solve against the actual moment residuals and, on genuine failure, falls back to a bounded least-squares best effort that gets as close to balance as the force limits allow. That is the physically correct behavior at maximum exertion.</p>
+
+    <h2 id="cocontraction">8. Co-contraction and stability</h2>
+    <p>Even when the math says only the back extensors are needed, the real trunk keeps its antagonist muscles (the abdominals and obliques) partly switched on for stability. The model enforces this as a minimum activation of 5 to 15% that grows with flexion angle, plus a small velocity term (Granata and Marras 2000).</p>
+    <div class="plain"><strong>Consequence:</strong> those extra co-contracting muscles add real compression to the disc that a balance-only model would miss. Including them makes the load estimates honest, and slightly higher.</div>
+
+    <h2 id="joint">9. From muscle forces to disc load and dose</h2>
+    <p>Once every muscle force is known, each is broken into components along the disc's axes, giving axial compression, front-to-back shear, and side-to-side shear. The weight of the upper body is projected into the same frame and added. Summing gives the instantaneous L4 to L5 compression. Integrating compression over the whole case gives the cumulative dose:</p>
+    <div class="eq">$$ \text{Dose} = \int_0^{T} C(t)\, dt \quad [\text{MN·s}] $$</div>
+    <div class="plain"><strong>Dose is the key output.</strong> A brief deep bend and a long shallow one can load the spine similarly once you account for time. Dose (compression multiplied by duration, in mega-newton-seconds) captures both how hard and how long. Peak compression is also tracked and checked against the NIOSH limits (3.4 kN action limit, 6.4 kN maximum permissible limit).</div>
+
+    <h2 id="exo">10. The exoskeleton</h2>
+    <p>A passive back-support device is modeled as a restorative torque in the forward-lean (sagittal) plane only. It follows a piecewise-linear profile: nothing below a 15-degree activation angle, then a linear ramp to a 25 Nm peak at 45 degrees, holding constant beyond that.</p>
+    <div class="eq">$$ M_{\text{exo}}(\theta) = \begin{cases} 0, & \theta < 15^\circ \\[4pt] 25\,\dfrac{\theta - 15^\circ}{45^\circ - 15^\circ}\ \text{Nm}, & 15^\circ \le \theta \le 45^\circ \\[10pt] 25\ \text{Nm}, & \theta > 45^\circ \end{cases} $$</div>
+    <div class="plain"><strong>An important honesty:</strong> the device helps only with forward lean. It offers no assistance for side-bending or twisting, so in the angled, asymmetric postures common in surgery the oblique muscles still fire and their compression is not offset. This is exactly why the model's 3D benefit (about 9%) is more modest than a simplified forward-only 2D model would claim.</div>
+
+    <h2 id="montecarlo">11. Real-world uncertainty: Monte Carlo</h2>
+    <p>One average surgeon is not enough. The deterministic model is wrapped in a nested Monte Carlo analysis that draws thousands of independent scenarios and, for each, runs a paired comparison of identical inputs with the device off versus on. Five families of variability are sampled:</p>
+    <ul>
+      <li><strong>Anthropometric:</strong> body mass ~ Normal(82, 12) kg, height ~ Normal(1.77, 0.07) m, and a case-duration factor.</li>
+      <li><strong>Muscle recruitment:</strong> the optimization exponent and co-contraction scale vary between surgeons.</li>
+      <li><strong>Device fit and slippage:</strong> transmission efficiency ~ Normal(0.80, 0.15), with within-case loosening.</li>
+      <li><strong>Compliance:</strong> the device is actually worn in a given phase with 80% probability.</li>
+      <li><strong>Movement pattern:</strong> per-posture angle jitter and sway amplitude.</li>
+    </ul>
+    <p>Everything is reproducible through per-iteration child seeds from a fixed master seed. Ablation runs turn on one source of variability at a time to see which ones actually move the benefit.</p>
+    <div class="plain"><strong>What this buys you:</strong> instead of a single fragile number, every result carries a mean and a 95% confidence interval, and we can say honestly which factors (device fit and compliance) matter and which (surgeon-to-surgeon coordination) barely do.</div>
+
+    <h2 id="results">12. What the model finds</h2>
+    <p>With a fitted, consistently worn device, cumulative spinal dose falls by about 9%, with a confidence interval that stays entirely positive (the device never nets out harmful).</p>
+    <table>
+      <tr><th>Scenario (fitted device)</th><th>Dose reduction</th><th>95% CI</th></tr>
+      <tr><td>Body-size variation only (ceiling)</td><td>10.2%</td><td>9.3 to 12.4%</td></tr>
+      <tr><td>All sources, fitted and worn</td><td>9.3%</td><td>7.0 to 12.0%</td></tr>
+    </table>
+    <p>Per procedure the reduction ranges from about 7% for upright cases to about 10% for long, deeply flexed ones, and the absolute load removed scales with case length and posture severity, spanning roughly a ninefold range from a short knee arthroscopy to a lumbar fusion. The 9% figure sits squarely within the published empirical range of 4 to 15% mean compression reduction for passive back exoskeletons, which is what you would expect for a forward-lean-only assist during sustained (non-lifting) surgical postures.</p>
+    <div class="plain"><strong>The honest caveats.</strong> Four arthroplasty procedures are anchored to directly measured intraoperative posture data; the other eleven are literature-informed estimates. A poorly fitted or inconsistently worn device roughly halves the benefit. And any translation into lifetime injury risk is an extrapolation beyond the model's measured ground, so it is treated with more caution than the load numbers themselves.</div>
+
+    <div class="callout">
+      Ready to see it for your own practice? <a href="protecting-the-surgeons-back.html">Return to the calculator &rarr;</a>
+    </div>
+
+    <h2 id="refs">13. References</h2>
+    <div class="references">
+      <p>de Leva P. Adjustments to Zatsiorsky-Seluyanov's segment inertia parameters. J Biomech. 1996;29(9):1223&ndash;1230.</p>
+      <p>Bogduk N, Macintosh JE, Pearcy MJ. A universal model of the lumbar back muscles in the upright position. Spine. 1992;17(8):897&ndash;913.</p>
+      <p>Ward SR, Eng CM, Smallwood LH, Lieber RL. Are current measurements of lumbar muscle architecture valid? Clin Orthop Relat Res. 2009;467(4):1074&ndash;1082.</p>
+      <p>Jorgensen MJ, Marras WS, Gupta P, Waters TR. Effect of torso flexion on the lumbar torso extensor muscle moment arms. Spine J. 2003;3(5):363&ndash;369.</p>
+      <p>Thelen DG. Adjustment of muscle mechanics model parameters to simulate dynamic contractions in older adults. J Biomech Eng. 2003;125(1):70&ndash;77.</p>
+      <p>Crowninshield RD, Brand RA. A physiologically based criterion of muscle force prediction in locomotion. J Biomech. 1981;14(11):793&ndash;801.</p>
+      <p>Granata KP, Marras WS. Cost-benefit of muscle cocontraction in protecting against spinal instability. Spine. 2000;25(11):1398&ndash;1404.</p>
+      <p>McGill SM. The biomechanics of low back injury. J Biomech. 1997;30(5):465&ndash;475.</p>
+      <p>Sato K, Kikuchi S, Yonezawa T. In vivo intradiscal pressure measurement in healthy individuals and in patients with ongoing back problems. Spine. 1999;24(23):2468&ndash;2474.</p>
+      <p>Szeto GP, Straker LM, Raine S. A field comparison of neck and shoulder postures. Appl Ergon. 2009;40(3):477&ndash;486.</p>
+      <p>NIOSH. Applications Manual for the Revised NIOSH Lifting Equation. 1994.</p>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Angel G. A. Prempeh. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    const menuToggle = document.querySelector('.menu-toggle');
+    const mainNav = document.querySelector('.main-nav');
+    menuToggle.addEventListener('click', () => {
+      mainNav.classList.toggle('active');
+      menuToggle.classList.toggle('active');
+    });
+  </script>
+</body>
+</html>
