@@ -88,6 +88,13 @@
     .fact .fun { font-size: 0.84rem; color: #7a7f87; margin-top: 0.5rem; font-style: italic; }
     .methods { background: #fbfbfc; border: 1px solid #eee; border-radius: 8px; padding: 1.25rem 1.5rem; font-size: 0.9rem; color: #555; margin-top: 1.5rem; }
     .disclaimer { margin-top: 2rem; font-size: 0.82rem; color: #8a8f96; border-top: 1px solid #eee; padding-top: 1.25rem; }
+    .feedback { background: var(--bg-light, #f6f7f9); border: 1px solid var(--border-light, #e6e8eb); border-radius: 12px; padding: 1.75rem 2rem; margin: 1rem 0 1rem; }
+    .feedback a { color: var(--navy, #002D62); font-weight: 600; }
+    .feedback textarea { width: 100%; box-sizing: border-box; padding: 0.8rem 0.9rem; border: 1px solid #dde1e5; border-radius: 8px; font-family: inherit; font-size: 1rem; background: #fff; resize: vertical; margin-top: 0.5rem; }
+    .feedback textarea:focus { border-color: var(--navy, #002D62); outline: none; box-shadow: 0 0 0 3px rgba(0,45,98,0.12); }
+    .btn-feedback { margin-top: 1rem; padding: 0.8rem 1.6rem; background: var(--navy, #002D62); color: #fff; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; letter-spacing: 0.3px; cursor: pointer; transition: transform 0.1s, box-shadow 0.1s; }
+    .btn-feedback:hover { transform: translateY(-1px); box-shadow: 0 6px 14px rgba(0,45,98,0.25); }
+    .btn-feedback:active { transform: translateY(1px); }
   </style>
 </head>
 
@@ -180,6 +187,15 @@
       <p>[3] Al-Mohrej OA, et al. The risk of ergonomic injury across surgical specialties. <em>PLOS One</em>. 2021;16(1):e0244868.</p>
       <p>[4] Passive back-support exoskeleton biomechanical evaluations report 7&ndash;21% reductions in lumbar load during sustained trunk flexion.</p>
     </div>
+
+    <hr>
+
+    <div class="feedback">
+      <h2 style="margin-top: 0; color: var(--navy);">Questions or Feedback?</h2>
+      <p>I would love to hear from surgeons and researchers. Send a quick note and it will open in your email app, or write to me directly at <a href="mailto:prempehresearch@gmail.com">prempehresearch@gmail.com</a>.</p>
+      <textarea id="fbMsg" rows="4" placeholder="Your thoughts, questions, or feedback..."></textarea>
+      <button type="button" class="btn-feedback" onclick="sendFeedback()">Send feedback</button>
+    </div>
   </main>
 
   <!-- Footer -->
@@ -197,6 +213,14 @@
       mainNav.classList.toggle('active');
       menuToggle.classList.toggle('active');
     });
+
+    // Feedback: open the visitor's email app pre-addressed with their message
+    function sendFeedback() {
+      const msg = (document.getElementById('fbMsg').value || '').trim();
+      const subject = encodeURIComponent('Feedback: Protecting the Surgeon\'s Back');
+      const body = encodeURIComponent(msg);
+      window.location.href = 'mailto:prempehresearch@gmail.com?subject=' + subject + '&body=' + body;
+    }
 
     // === Procedure library (from lumbar_spine_sim / results/procedures.csv) ===
     // dose in MN*s (cumulative L4-L5 compression x time); peaks in N.
