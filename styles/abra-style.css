@@ -382,7 +382,15 @@ footer p {
 
     .project-card {
         grid-template-columns: 1fr;
-        gap: 1.5rem;
+        gap: 1rem;
+        padding: 1.25rem;
+    }
+
+    /* Keep stacked cards compact on phones so each tab is not a long scroll.
+       !important overrides the per-image inline heights on the homepage,
+       while each image keeps its own object-fit (cover vs contain). */
+    .project-image img {
+        height: 200px !important;
     }
 
     .activities-grid,
@@ -395,6 +403,14 @@ footer p {
     .hero-photo {
         width: 220px;
         height: 220px;
+    }
+
+    .project-image img {
+        height: 175px !important;
+    }
+
+    .project-card {
+        padding: 1rem;
     }
 }
 
