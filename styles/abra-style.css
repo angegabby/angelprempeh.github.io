@@ -412,9 +412,35 @@ footer p {
         font-size: 1rem;
     }
 
-    .activities-grid,
-    .publications-grid {
+    .activities-grid {
         grid-template-columns: 1fr;
+    }
+
+    /* Tile Featured Publications two-up on mobile to cut the long scroll. */
+    .publications-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.85rem;
+    }
+
+    .publication-card {
+        padding: 1rem;
+    }
+
+    .publication-card h4 {
+        font-size: 0.9rem;
+        line-height: 1.3;
+    }
+
+    .publication-card .journal {
+        font-size: 0.74rem;
+    }
+
+    .publication-card .description {
+        font-size: 0.78rem;
+    }
+
+    .publication-card .pub-link {
+        font-size: 0.8rem;
     }
 }
 
