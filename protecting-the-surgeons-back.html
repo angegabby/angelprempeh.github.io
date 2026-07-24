@@ -110,15 +110,15 @@
       <h2 style="font-size: 1.5rem; color: var(--navy); margin-top: 0; font-weight: 500;">Biomechanical effects of passive back exoskeletons during surgical postures</h2>
     </div>
 
-    <h2 style="margin-top: 0;">The Model, in Brief</h2>
-    <p>Surgeons spend hours leaning forward over the operating field. In that sustained, forward-flexed posture the weight of the head, arms, and trunk pulls the upper body down, and the muscles running along the spine &mdash; the <em>erector spinae</em> &mdash; contract continuously to hold the torso up. Because those muscles pull on a very short lever, the force is several times body weight and is transmitted straight into the lumbar discs. Repeated across a career, this cumulative load is a leading driver of the chronic back injury that ends many surgical careers early.</p>
-    <p>A <strong>passive back-support exoskeleton</strong> is a wearable, motor-free brace. Elastic elements store energy as the surgeon bends and return part of it as a gentle extension assist, sharing the work of holding the trunk up. To quantify the benefit, we built a <strong>3D static-optimization model of the lumbar spine (L4&ndash;L5)</strong> and drove it through realistic operating postures. For four arthroplasty procedures the posture profiles are anchored to <strong>direct intraoperative trunk-sensor measurements</strong>; the remaining eleven are <strong>literature-informed estimates</strong> calibrated to those measured anchors. For every procedure the model computes the cumulative compressive <em>dose</em> on the disc &mdash; force multiplied by time &mdash; with and without a fitted, worn device.</p>
-    <p>The result is a per-procedure library of spinal-load savings. The calculator below turns it into <em>your</em> numbers: tell it how many of each procedure you perform in a year, and it estimates how much lumbar load the exoskeleton lifts off your spine across your real case mix and over your career.</p>
+    <h2 style="margin-top: 0;">About the Model</h2>
+    <p>Surgeons spend hours leaning over the operating table. Holding that bent-forward posture loads the muscles and discs of the lower back, and over a career that repeated strain is a major cause of the back pain and injury that push surgeons to retire early.</p>
+    <p>A passive back-support exoskeleton is a lightweight brace with no motor. It stores energy as you bend and gives some of it back as a gentle lift, so your back muscles do less of the work. We built a 3D computer model of the lower spine and ran it through real operating postures for 15 common orthopedic procedures to measure how much load the device takes off the spine.</p>
+    <p>Enter how many of each procedure you do in a year, and the calculator below estimates how much back load the exoskeleton saves you across your cases and over your career.</p>
 
     <hr>
 
     <h2>Estimate Your Load Savings</h2>
-    <p>Enter the average number of each procedure you perform per year. Leave the rest at zero. Procedures marked <span style="font-size:0.63rem;text-transform:uppercase;letter-spacing:0.4px;font-weight:700;padding:1px 6px;border-radius:10px;background:#e8f0fe;color:#123a8f;">measured</span> rest on direct posture measurement; <span style="font-size:0.63rem;text-transform:uppercase;letter-spacing:0.4px;font-weight:700;padding:1px 6px;border-radius:10px;background:#f0f1f3;color:#77797d;">est.</span> are literature-informed estimates.</p>
+    <p>Enter the average number of each procedure you perform per year. Leave the rest at zero.</p>
 
     <div class="calc">
       <div class="col-head"><span>Procedure</span><span>Cases / yr</span></div>
@@ -142,12 +142,12 @@
       <div class="fact-grid">
         <div class="fact">
           <div class="num" id="peakForce">-- &rarr; -- N</div>
-          <div class="lbl">Peak L4&ndash;L5 compression at the deepest-flexion moment of a case, without &rarr; with the device.</div>
+          <div class="lbl">Peak L4&ndash;L5 compression at the deepest point of a case, without and with the device.</div>
           <div class="fun" id="peakFun"></div>
         </div>
         <div class="fact">
           <div class="num" id="casesErased">--</div>
-          <div class="lbl">Cases' worth of spinal load erased every year &mdash; load your back simply never has to carry.</div>
+          <div class="lbl">Cases' worth of spinal load erased every year. Load your back simply never has to carry.</div>
           <div class="fun" id="casesFun"></div>
         </div>
         <div class="fact">
@@ -157,13 +157,13 @@
         </div>
         <div class="fact">
           <div class="num" id="elephants">--</div>
-          <div class="lbl">Total weight lifted off your back over your career, in elephants (~6,000 kg each).</div>
+          <div class="lbl">Total weight lifted off your back over your whole career.</div>
           <div class="fun" id="eleFun"></div>
         </div>
       </div>
 
       <div class="methods">
-        <strong>How this is estimated.</strong> Results come from a 3D static-optimization lumbar-spine (L4&ndash;L5) model run per procedure at its measured or estimated trunk-posture profile and case duration, comparing a fitted, always-worn device (95% torque transmission) against no device. Your figures are the volume-weighted sum across the procedures you entered <span id="mixNote"></span>. Cumulative <em>dose</em> is compression integrated over time (MN&middot;s). A poorly fitted or inconsistently worn device roughly halves these benefits. The four arthroplasty procedures are calibrated to direct trunk-sensor measurement; the other eleven are transparent, literature-anchored estimates whose absolute values carry real uncertainty.
+        <strong>How this is estimated.</strong> Results come from a 3D model of the lower spine (L4 to L5) run for each procedure at its typical operating posture and case length, comparing a well-fitted, always-worn device against no device. Your figures are the combined total across the procedures you entered, weighted by how many of each you do. Dose means compression added up over time (MN&middot;s). A poorly fitted or inconsistently worn device roughly halves these benefits. Some procedures are based on direct posture measurements and the rest on careful estimates, so treat the numbers as informed projections rather than exact values.
       </div>
 
       <div class="disclaimer">
@@ -176,7 +176,7 @@
     <div class="references">
       <h2>Selected References</h2>
       <p>[1] Meltzer AJ, Hallbeck MS, Morrow MM, et al. Measuring Ergonomic Risk in Operating Surgeons by Using Wearable Technology. <em>JAMA Surgery</em>. 2020;155(5):444&ndash;446.</p>
-      <p>[2] The Burden of Revision Arthroplasty: An Ergonomic Analysis of Surgeon Posture in the OR. <em>JAAOS Global Research &amp; Reviews</em> (PMC11826046) &mdash; 286 cases, wearable trunk sensor.</p>
+      <p>[2] The Burden of Revision Arthroplasty: An Ergonomic Analysis of Surgeon Posture in the OR. <em>JAAOS Global Research &amp; Reviews</em> (PMC11826046). 286 cases, wearable trunk sensor.</p>
       <p>[3] Al-Mohrej OA, et al. The risk of ergonomic injury across surgical specialties. <em>PLOS One</em>. 2021;16(1):e0244868.</p>
       <p>[4] Passive back-support exoskeleton biomechanical evaluations report 7&ndash;21% reductions in lumbar load during sustained trunk flexion.</p>
     </div>
@@ -234,8 +234,7 @@
         group.forEach(p => {
           const row = document.createElement('div');
           row.className = 'proc-row';
-          const badge = p.measured ? '<span class="badge measured">measured</span>' : '<span class="badge est">est.</span>';
-          row.innerHTML = '<div class="proc-name">' + p.name + badge + '</div>' +
+          row.innerHTML = '<div class="proc-name">' + p.name + '</div>' +
             '<input type="number" min="0" step="1" value="0" id="v_' + p.id + '" aria-label="' + p.name + ' cases per year">';
           wrap.appendChild(row);
         });
@@ -251,10 +250,36 @@
       return "about a full-grown golden retriever";
     }
 
+    // Varied "big weight" comparisons for the career total (kg each)
+    const COMPARISONS = [
+      { name: 'elephants', kg: 6000, emoji: '🐘' },
+      { name: 'hippos', kg: 1500, emoji: '🦛' },
+      { name: 'grand pianos', kg: 480, emoji: '🎹' },
+      { name: 'horses', kg: 550, emoji: '🐴' },
+      { name: 'polar bears', kg: 450, emoji: '🐻‍❄️' },
+      { name: 'grizzly bears', kg: 360, emoji: '🐻' },
+      { name: 'vending machines', kg: 400, emoji: '🥤' },
+      { name: 'dairy cows', kg: 750, emoji: '🐄' },
+      { name: 'motorcycles', kg: 220, emoji: '🏍️' },
+      { name: 'gorillas', kg: 160, emoji: '🦍' },
+      { name: 'grand piano-sized bank vaults', kg: 900, emoji: '🏦' },
+      { name: 'baby elephants', kg: 100, emoji: '🐘' }
+    ];
+
+    // Pick a comparison that lands on a nice count (>= 3), at random for variety
+    function funComparison(kg) {
+      const good = COMPARISONS.filter(c => kg / c.kg >= 3);
+      const pool = good.length ? good : COMPARISONS;
+      const c = pool[Math.floor(Math.random() * pool.length)];
+      const count = kg / c.kg;
+      const shown = count >= 10 ? Math.round(count) : count.toFixed(1);
+      return { text: '≈ ' + shown + ' ' + c.name, emoji: c.emoji };
+    }
+
     function calcLoad() {
       const years = parseFloat(document.getElementById('years').value) || 25;
       let totalCases = 0, doseNoYr = 0, doseSavedYr = 0;
-      let peakNoW = 0, peakExoW = 0, careerKg = 0, measuredCases = 0;
+      let peakNoW = 0, peakExoW = 0, careerKg = 0;
 
       PROCEDURES.forEach(p => {
         const n = parseFloat(document.getElementById('v_' + p.id).value) || 0;
@@ -264,7 +289,6 @@
         doseSavedYr += n * p.doseSaved;
         peakNoW += n * p.peakNo;
         peakExoW += n * p.peakExo;
-        if (p.measured) measuredCases += n;
         // avg force removed per case (N) = saved dose / duration(s); x career cases -> kg lifted off
         const avgRemovedN = (p.doseSaved * 1e6) / (p.dur * 60);
         careerKg += (avgRemovedN / G) * n * years;
@@ -283,24 +307,21 @@
       const peakNo = peakNoW / totalCases;
       const peakExo = peakExoW / totalCases;
       const peakSavedKg = (peakNo - peakExo) / G;
-      const elephants = careerKg / ELEPHANT_KG;
-      const measuredPct = Math.round((measuredCases / totalCases) * 100);
+      const fun = funComparison(careerKg);
 
       document.getElementById('pctCut').innerText = redPct.toFixed(1) + '%';
 
       document.getElementById('peakForce').innerText = Math.round(peakNo).toLocaleString() + ' → ' + Math.round(peakExo).toLocaleString() + ' N';
-      document.getElementById('peakFun').innerText = '≈ ' + peakSavedKg.toFixed(0) + ' kg shaved off the hardest moment of every case — ' + relatable(peakSavedKg) + '.';
+      document.getElementById('peakFun').innerText = '≈ ' + peakSavedKg.toFixed(0) + ' kg shaved off the hardest moment of every case, ' + relatable(peakSavedKg) + '.';
 
       document.getElementById('casesErased').innerText = '≈ ' + Math.round(casesErased) + ' cases/yr';
       document.getElementById('casesFun').innerText = 'Across ~' + Math.round(totalCases) + ' cases a year, the device carries the equivalent of ' + Math.round(casesErased) + ' of them entirely off your spine.';
 
       document.getElementById('doseYear').innerText = doseSavedYr.toFixed(1) + ' MN·s';
-      document.getElementById('doseFun').innerText = 'Compression × time removed from your L4–L5 disc every year you operate.';
+      document.getElementById('doseFun').innerText = 'Compression times time removed from your lower-back disc every year you operate.';
 
-      document.getElementById('elephants').innerText = '≈ ' + elephants.toFixed(1) + ' 🐘';
-      document.getElementById('eleFun').innerText = 'Over ' + years + ' years that’s ~' + Math.round(careerKg).toLocaleString() + ' kg of load your back never has to hold.';
-
-      document.getElementById('mixNote').innerText = '(' + measuredPct + '% of your entered volume rests on directly measured posture data)';
+      document.getElementById('elephants').innerText = fun.text + ' ' + fun.emoji;
+      document.getElementById('eleFun').innerText = 'Over ' + years + ' years that is about ' + Math.round(careerKg).toLocaleString() + ' kg of load your back never has to hold.';
 
       document.getElementById('results').style.display = 'block';
       document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
